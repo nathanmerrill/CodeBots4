@@ -26,7 +26,7 @@ public final class ReadonlyLog {
         return log.getLogsOnTurn(turnNumber).stream().map(ReadonlyLogEntry::new).collect(Collectors.toList());
     }
 
-    public static class ReadonlyLogEntry{
+    public final static class ReadonlyLogEntry{
         private final Log.LogEntry entry;
         public ReadonlyLogEntry(Log.LogEntry entry){
             this.entry = entry;
