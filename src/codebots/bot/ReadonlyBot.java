@@ -19,4 +19,8 @@ public final class ReadonlyBot {
     public ReadonlyVariables getVariables(){
         return new ReadonlyVariables(bot.getVariables());
     }
+
+    public boolean functionsMatch(Bot bot, FunctionType type){
+        return this.bot.functionsMatch(bot, type);
+    }
 }

@@ -2,7 +2,6 @@ package codebots.bot;
 
 import codebots.gameobjects.*;
 
-import java.util.List;
 import java.util.Random;
 
 public abstract class CodeBot {
@@ -42,4 +41,7 @@ public abstract class CodeBot {
         return underlyingBot.getRandom();
     }
 
+    protected final boolean functionsMatch(ReadonlyBot bot, FunctionType type){
+        return bot.functionsMatch(underlyingBot, type);
+    }
 }

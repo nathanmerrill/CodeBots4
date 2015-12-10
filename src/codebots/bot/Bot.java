@@ -29,6 +29,10 @@ public final class Bot {
         this.round = round;
     }
 
+    public boolean functionsMatch(Bot bot, FunctionType type){
+        return functionOwners.get(type).equals(bot.functionOwners.get(type));
+    }
+
     public IPAddress fromString(String string){
         return round.fromString(string);
     }
