@@ -16,13 +16,11 @@ public final class AddressBook {
     }
 
     private final Map<IPAddress, AddressType> addressType;
-    private final List<IPAddress> allAddresses;
     private final Round round;
 
     public AddressBook(Round round){
         addressType = new HashMap<>();
         this.round = round;
-        allAddresses = new ArrayList<>();
     }
 
     public void add(IPAddress address){
@@ -30,7 +28,6 @@ public final class AddressBook {
     }
 
     public void add(IPAddress address, AddressType type){
-        allAddresses.add(address);
         addressType.put(address, type);
     }
 
@@ -41,29 +38,31 @@ public final class AddressBook {
         for (IPAddress address: addresses){
             addressType.put(address, type);
         }
-        this.allAddresses.addAll(addresses);
     }
 
     public void clear(){
-        allAddresses.clear();
+        addressType.clear();
         ensureContainsAddress();
     }
 
     public void clear(AddressType type){
-        allAddresses.removeAll(getAddressesOfType(type));
+        Iterator<Map.Entry<IPAddress, AddressType>> iter = addressType.entrySet().iterator();
+        while (iter.hasNext()){
+            if (iter.next().getValue() == type){
+                iter.remove();
+            }
+        }
         ensureContainsAddress();
     }
 
     public void remove(IPAddress address){
-        allAddresses.remove(address);
+        addressType.remove(address);
         ensureContainsAddress();
     }
 
     private void ensureContainsAddress(){
-        if (allAddresses.size() == 0){
-            IPAddress newAddress = round.getRandomAddress();
-            allAddresses.add(newAddress);
-            addressType.put(newAddress, AddressType.NEUTRAL);
+        if (addressType.size() == 0){
+            addressType.put(round.getRandomAddress(), AddressType.NEUTRAL);
         }
     }
 
@@ -79,14 +78,23 @@ public final class AddressBook {
     }
 
     public int size(){
-        return allAddresses.size();
+        return addressType.size();
     }
 
     public IPAddress getAddress(int n){
-        return allAddresses.get(n);
+        if (n < 0 || n > size()){
+            throw new IndexOutOfBoundsException();
+        }
+        for (IPAddress address : addressType.keySet()){
+            if (n == 0){
+                return address;
+            }
+            n--;
+        }
+        throw new IndexOutOfBoundsException();
     }
 
     public List<IPAddress> allAddresses(){
-        return new ArrayList<IPAddress>(allAddresses);
+        return new ArrayList<IPAddress>(addressType.keySet());
     }
 }
