@@ -17,7 +17,9 @@ public class DisarmerBot extends CodeBot {
 
     public IPAddress selectAttackTarget() {
         AddressBook book = getAddressBook();
-        return book.getAddress(getRandom().nextInt(book.size()));
+        IPAddress address = book.getAddress(getRandom().nextInt(book.size()));
+        book.clear();
+        return address;
     }
 
     public void readData(ReadonlyBot bot) { getLog().clear(); /*Safety*/ }
