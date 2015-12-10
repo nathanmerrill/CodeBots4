@@ -73,6 +73,7 @@ public final class Bot {
         log.addLog(new Log.LogEntry(FunctionType.SELECT_ATTACK_TARGET).address(address));
         return address;
     }
+
     public void readData(ReadonlyBot bot){
         getOwner(FunctionType.READ_DATA).readData(bot);
         log.addLog(new Log.LogEntry(FunctionType.READ_DATA));
@@ -103,7 +104,8 @@ public final class Bot {
         return variables;
     }
 
-    public void replace(FunctionType type, CodeBot bot){
+    public void replace(FunctionType type, CodeBot bot, IPAddress address){
+        log.addLog(new Log.LogEntry(FunctionType.SELECT_ATTACK_TARGET).attacked().address(address));
         functionOwners.put(type, bot);
     }
     

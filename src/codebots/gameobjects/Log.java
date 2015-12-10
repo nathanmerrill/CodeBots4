@@ -6,6 +6,7 @@ import codebots.controller.Round;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class Log {
     private final HashMap<Integer, List<LogEntry>> logs;
@@ -63,9 +64,26 @@ public final class Log {
         return new ArrayList<>(logs.getOrDefault(turnNumber, new ArrayList<>()));
     }
 
+    public LogEntry getLastLogOfType(FunctionType type){
+        for (int i = currentTurn; i >= 0; i--){
+            for (LogEntry entry : logs.get(i)){
+                if (!entry.attacked && entry.type == type)
+                    return entry;
+            }
+        }
+        return null;
+    }
+
+    public List<LogEntry> getPastTurnAttackLogs(){
+        return getLastTurnLogs().stream()
+                .filter(i -> i.attacked)
+                .collect(Collectors.toList());
+    }
+
     public static class LogEntry {
         public final FunctionType type;
 
+        public boolean attacked;
         public IPAddress address;
         public Message message;
         public FunctionType targetFunction;
@@ -82,6 +100,10 @@ public final class Log {
         }
         public LogEntry targetFunction(FunctionType type){
             this.targetFunction = type;
+            return this;
+        }
+        public LogEntry attacked(){
+            this.attacked = true;
             return this;
         }
     }

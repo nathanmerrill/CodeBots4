@@ -1,8 +1,7 @@
 package codebots.controller;
 
 import codebots.bot.CodeBot;
-import codebots.bots.DefaultCodeBot;
-import codebots.bots.RandomCodeBot;
+import codebots.bots.*;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -15,6 +14,9 @@ public class CodeBotFactory {
     static {
         playerCreator.put(RandomCodeBot.class, RandomCodeBot::new);
         playerCreator.put(DefaultCodeBot.class, DefaultCodeBot::new);
+        playerCreator.put(NullBot.class, NullBot::new);
+        playerCreator.put(HelperBot.class, HelperBot::new);
+        playerCreator.put(TrustBot.class, TrustBot::new);
     }
 
     public static Set<Class<? extends CodeBot>> getAllTypes() {

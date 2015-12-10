@@ -6,8 +6,6 @@ import codebots.gameobjects.FunctionType;
 import codebots.gameobjects.IPAddress;
 import codebots.gameobjects.Message;
 
-import java.util.List;
-
 public class DefaultCodeBot extends CodeBot {
 
     @Override

@@ -7,8 +7,6 @@ import codebots.gameobjects.FunctionType;
 import codebots.gameobjects.IPAddress;
 import codebots.gameobjects.Message;
 
-import java.util.*;
-
 public class RandomCodeBot extends CodeBot {
 
 

@@ -67,7 +67,7 @@ public class Round {
 
     public Map<String, Integer> getScores() {
         return allBots.stream()
-                .collect(Collectors.groupingBy(Bot::getFlag, Collectors.counting()))
+                .collect(Collectors.groupingBy(bot -> ""+bot.getFlag(), Collectors.counting()))
                 .entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry->entry.getValue().intValue()));
     }
 
@@ -79,24 +79,44 @@ public class Round {
     }
 
     private void sendMessages(){
-        HashMap<Bot, Bot> recipients = new HashMap<>();
-        allBots.forEach(bot -> recipients.put(bot, addressToBot.get(bot.selectMessageRecipient())));
-        HashMap<Bot, Message> messages = new HashMap<>();
-        allBots.forEach(bot -> messages.put(bot, bot.sendMessage()));
-        recipients.entrySet().forEach(entry -> entry.getValue()
-                .processMessage(botToAddress.get(entry.getKey()), messages.get(entry.getKey())));
+        Map<Bot, IPAddress> recipients = new HashMap<>();
+        for (Bot bot: allBots){
+            recipients.put(bot, bot.selectMessageRecipient());
+        }
+
+        Map<Bot, Message> messages = new HashMap<>();
+        for (Bot bot: allBots){
+            messages.put(bot, bot.sendMessage());
+        }
+
+        allBots.stream()
+                .filter(bot -> recipients.get(bot) != null)
+                .filter(bot -> messages.get(bot) != null)
+                .filter(bot -> addressToBot.containsKey(recipients.get(bot)))
+                .forEach(bot -> addressToBot.get(recipients.get(bot))
+                        .processMessage(botToAddress.get(bot), messages.get(bot)));
     }
 
     private void attack(){
-        Map<Bot, FunctionType> blocked = allBots.stream()
-                .collect(Collectors.toMap(Function.identity(), Bot::selectFunctionToBlock));
+        Map<Bot, FunctionType> blocked = new HashMap<>();
+        for (Bot bot: allBots){
+            blocked.put(bot, bot.selectFunctionToBlock());
+        }
 
-        Map<Bot, List<Bot>> attacks = allBots.stream()
-                .collect(Collectors.groupingBy(bot -> addressToBot.get(bot.selectAttackTarget()), Collectors.toList()));
+        Map<Bot, List<Bot>> attacks = new HashMap<>();
+        for (Bot bot: allBots) {
+            IPAddress target = bot.selectAttackTarget();
+            if (target == null) {
+                continue;
+            }
+            Bot targetBot = addressToBot.get(target);
+            attacks.putIfAbsent(targetBot, new ArrayList<>());
+            attacks.get(targetBot).add(bot);
+        }
 
         Map<Bot, List<Bot>> successfulAttacks = attacks.entrySet().stream()
-                .filter(entry -> entry.getValue().size() >= Globals.NUM_REQUIRED_ATTACKERS)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                        .filter(entry -> entry.getValue().size() >= Globals.NUM_REQUIRED_ATTACKERS)
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         successfulAttacks.entrySet().forEach(attack ->
                 attack.getValue().forEach(bot -> bot.readData(new ReadonlyBot(attack.getKey())))
@@ -113,15 +133,18 @@ public class Round {
     private Map<FunctionType, List<Bot>> getDesiredReplacements(List<Bot> attackers){
         Map<FunctionType, List<Bot>> replacements = new HashMap<>();
         for (Bot attacker: attackers){
-            FunctionType functionToReplace = attacker.selectFunctionToReplace();
-            replacements.putIfAbsent(functionToReplace, new ArrayList<>());
-            replacements.get(functionToReplace).add(attacker);
+            FunctionType toReplace = attacker.selectFunctionToReplace();
+            if (toReplace == null)
+                continue;
+            replacements.putIfAbsent(toReplace, new ArrayList<>());
+            replacements.get(toReplace).add(attacker);
         }
         return replacements;
     }
 
     private void replaceFunction(Bot target, FunctionType toReplace, List<Bot> candidates){
-        target.replace(toReplace, candidates.get(random.nextInt(candidates.size())).getParent());
+        Bot selectedCandidate = candidates.get(random.nextInt(candidates.size()));
+        target.replace(toReplace, selectedCandidate.getParent(), botToAddress.get(selectedCandidate));
     }
 
     public IPAddress getRandomAddress(){

@@ -22,7 +22,7 @@ public class Game {
 
     public void printScores(){
         for (String identifier: scoreboard.rankPlayers()){
-            System.out.println(scoreboard.getTotalScore(identifier)+"\t"+identifier);
+            System.out.println(scoreboard.getAverageScore(identifier)+"\t"+identifier);
         }
     }
 
