@@ -17,6 +17,7 @@ public class CodeBotFactory {
         playerCreator.put(NullBot.class, NullBot::new);
         playerCreator.put(HelperBot.class, HelperBot::new);
         playerCreator.put(TrustBot.class, TrustBot::new);
+        playerCreator.put(DisarmerBot.class, DisarmerBot::new);
     }
 
     public static Set<Class<? extends CodeBot>> getAllTypes() {
