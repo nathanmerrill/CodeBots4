@@ -60,6 +60,8 @@ public final class Bot {
     public Message sendMessage(){
         Message message = getOwner(FunctionType.SEND_MESSAGE).sendMessage();
         log.addLog(new Log.LogEntry(FunctionType.SEND_MESSAGE).message(message));
+        if (message == null || message.getAddress() == null)
+            return message;
         return message;
     }
 

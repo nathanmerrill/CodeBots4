@@ -12,6 +12,9 @@ public final class Variables {
     }
 
     public void add(String name, String value){
+        if (name == null || value == null){
+            return;
+        }
         variables.put(name, value);
     }
 
@@ -24,6 +27,9 @@ public final class Variables {
     }
 
     public String get(String name){
+        if (name == null){
+            return null;
+        }
         return variables.get(name);
     }
 

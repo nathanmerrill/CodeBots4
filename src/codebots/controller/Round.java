@@ -48,10 +48,11 @@ public class Round {
     }
 
     private IPAddress generateNextIPAddress(){
-        IPAddress address = new IPAddress(random);
+        IPAddress address = new IPAddress(random, this);
         if (allAddresses.containsKey(address.getAddress())){
             return generateNextIPAddress();
         }
+        allAddresses.put(address.getAddress(), address);
         return address;
     }
 
