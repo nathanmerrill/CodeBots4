@@ -108,6 +108,12 @@ public final class Bot {
         log.addLog(new Log.LogEntry(FunctionType.SELECT_ATTACK_TARGET).attacked().address(address));
         functionOwners.put(type, bot);
     }
-    
 
+    public int getTurnNumber(){
+        return round.getCurrentTurn();
+    }
+    
+    public IPAddress getSelfIPAddress(){
+        return round.fromBot(this);
+    }
 }

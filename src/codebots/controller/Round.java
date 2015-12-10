@@ -55,6 +55,10 @@ public class Round {
         return address;
     }
 
+    public IPAddress fromBot(Bot bot){
+        return botToAddress.get(bot);
+    }
+
     public Random getRandom(){
         return random;
     }

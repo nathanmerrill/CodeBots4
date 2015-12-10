@@ -44,4 +44,12 @@ public abstract class CodeBot {
     protected final boolean functionsMatch(ReadonlyBot bot, FunctionType type){
         return bot.functionsMatch(underlyingBot, type);
     }
+
+    protected final int getTurnNumber(){
+        return underlyingBot.getTurnNumber();
+    }
+
+    protected final IPAddress personalAddress(){
+        return underlyingBot.getSelfIPAddress();
+    }
 }
