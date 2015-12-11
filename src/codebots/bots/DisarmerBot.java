@@ -4,7 +4,6 @@ import codebots.bot.CodeBot;
 import codebots.bot.ReadonlyBot;
 import codebots.gameobjects.*;
 
-import java.util.List;
 
 public class DisarmerBot extends CodeBot {
     public IPAddress selectMessageRecipient() { return null; }

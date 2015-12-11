@@ -80,7 +80,7 @@ public final class Log {
                 .collect(Collectors.toList());
     }
 
-    public static class LogEntry {
+    public final static class LogEntry {
         public final FunctionType type;
 
         public boolean attacked;
