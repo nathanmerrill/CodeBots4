@@ -23,4 +23,8 @@ public final class ReadonlyBot {
     public boolean functionsMatch(Bot bot, FunctionType type){
         return this.bot.functionsMatch(bot, type);
     }
+
+    public IPAddress getIPAddress(){
+        return bot.getSelfIPAddress();
+    }
 }

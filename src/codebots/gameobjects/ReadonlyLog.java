@@ -26,6 +26,14 @@ public final class ReadonlyLog {
         return log.getLogsOnTurn(turnNumber).stream().map(ReadonlyLogEntry::new).collect(Collectors.toList());
     }
 
+    public ReadonlyLogEntry getLastLogOfType(FunctionType type){
+        return new ReadonlyLogEntry(log.getLastLogOfType(type));
+    }
+
+    public List<ReadonlyLogEntry> getPastTurnAttackLogs(){
+        return log.getPastTurnAttackLogs().stream().map(ReadonlyLogEntry::new).collect(Collectors.toList());
+    }
+
     public final static class ReadonlyLogEntry{
         private final Log.LogEntry entry;
         public ReadonlyLogEntry(Log.LogEntry entry){
@@ -42,6 +50,9 @@ public final class ReadonlyLog {
         }
         public FunctionType getTargetFunction(){
             return entry.targetFunction;
+        }
+        public boolean hasAttacked(){
+            return entry.attacked;
         }
     }
 }
